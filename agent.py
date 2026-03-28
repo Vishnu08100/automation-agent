@@ -2,12 +2,13 @@ import pandas as pd
 import os
 import smtplib
 from email.message import EmailMessage
+import json
 import time
 
 DATA_FILE = "data/student_data1.csv"
 
-EMAIL_USER = os.getenv("EMAIL_USER_1")
-EMAIL_PASS = os.getenv("EMAIL_PASS_1")
+# Load all accounts from secret
+accounts = json.loads(os.getenv("EMAIL_ACCOUNTS"))
 
 
 def extract_emails():
@@ -32,22 +33,45 @@ Regards,
 VaultSphere AI
 """
 
-    with smtplib.SMTP_SSL("smtp.hostinger.com", 465) as smtp:
-        smtp.login(EMAIL_USER, EMAIL_PASS)
+    email_index = 0
 
-        for i, email in enumerate(emails[:10]):  # TEST: only 10
-            msg = EmailMessage()
-            msg["Subject"] = subject
-            msg["From"] = EMAIL_USER
-            msg["To"] = email
-            msg.set_content(body)
+    for account in accounts:
+        user = account["user"]
+        password = account["pass"]
+        limit = account["limit"]
 
-            try:
-                smtp.send_message(msg)
-                print(f"Sent to {email}")
-                time.sleep(5)  # delay to avoid spam
-            except Exception as e:
-                print(f"Failed: {email} -> {e}")
+        print(f"Using account: {user}")
+
+        try:
+            with smtplib.SMTP_SSL("smtp.hostinger.com", 465) as smtp:
+                smtp.login(user, password)
+
+                count = 0
+
+                while count < limit and email_index < len(emails) and email_index < 20:  # test limit 20
+                    receiver = emails[email_index]
+
+                    msg = EmailMessage()
+                    msg["Subject"] = subject
+                    msg["From"] = user
+                    msg["To"] = receiver
+                    msg.set_content(body)
+
+                    try:
+                        smtp.send_message(msg)
+                        print(f"Sent from {user} to {receiver}")
+                        count += 1
+                        email_index += 1
+                        time.sleep(5)
+                    except Exception as e:
+                        print(f"Failed {receiver}: {e}")
+                        email_index += 1
+
+        except Exception as e:
+            print(f"Login failed for {user}: {e}")
+
+        if email_index >= 20:  # test only
+            break
 
 
 def main():

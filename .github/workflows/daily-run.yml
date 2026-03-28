@@ -2,8 +2,8 @@ name: Daily Automation
 
 on:
   schedule:
-    - cron: '0 9 * * *'   # runs daily at 9 AM
-  workflow_dispatch:       # allows manual run
+    - cron: '0 9 * * *'
+  workflow_dispatch:
 
 jobs:
   run-agent:
@@ -19,11 +19,10 @@ jobs:
           python-version: '3.10'
 
       - name: Install dependencies
-        run: |
-          pip install pandas openpyxl
+        run: pip install pandas openpyxl
 
-     - name: Run script
-  run: python agent.py
-  env:
-    EMAIL_USER_1: ${{ secrets.EMAIL_USER_1 }}
-    EMAIL_PASS_1: ${{ secrets.EMAIL_PASS_1 }}
+      - name: Run script
+        run: python agent.py
+        env:
+          EMAIL_USER_1: ${{ secrets.EMAIL_USER_1 }}
+          EMAIL_PASS_1: ${{ secrets.EMAIL_PASS_1 }}

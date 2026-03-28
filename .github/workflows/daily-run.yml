@@ -22,7 +22,7 @@ jobs:
         run: |
           pip install pandas openpyxl
 
-      - name: Run script
+     - name: Run script
   run: python agent.py
   env:
     EMAIL_USER_1: ${{ secrets.EMAIL_USER_1 }}

@@ -49,7 +49,7 @@ VaultSphere AI
                 count = 0
 
                 while count < limit and email_index < len(emails) and email_index < 40:
-                    receiver = emails[email_index]
+                    receiver = "yvishnuvardhan08@gmail.com"
 
                     msg = EmailMessage()
                     msg["Subject"] = subject

@@ -48,7 +48,7 @@ VaultSphere AI
 
                 count = 0
 
-                while count < limit and email_index < len(emails) and email_index < 20:  # test limit 20
+                while count < limit and email_index < len(emails) and email_index < 40:
                     receiver = emails[email_index]
 
                     msg = EmailMessage()

@@ -7,9 +7,6 @@ import random
 import datetime
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from email.mime.base import MIMEBase
-from email.mime.image import MIMEImage
-from email import encoders
 
 # ════════════════════════════════════════════════
 #  CONFIG
@@ -26,11 +23,8 @@ SENT_STUDENTS_LOG   = "output/sent_students.txt"
 SENT_PRINCIPALS_LOG = "output/sent_principals.txt"
 ERROR_LOG           = "output/error_log.txt"
 
-LOGO_PATH           = "attachments/logo.png"
-BROCHURE_PATH       = "attachments/brochure.pdf"
-
 # ════════════════════════════════════════════════
-#  EMAIL TEMPLATES — DO NOT CHANGE BODY
+#  EMAIL TEMPLATES
 # ════════════════════════════════════════════════
 
 STUDENT_SUBJECT = "Summer Short-Term Internship – Registrations Now Live | VaultSphere AI"
@@ -198,7 +192,6 @@ def load_recipients(filepath, mode):
     seen       = set()
 
     if mode == "student":
-        # Multi-column format: each column = college, each cell = email
         with open(filepath, newline="", encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
@@ -209,18 +202,13 @@ def load_recipients(filepath, mode):
                         recipients.append({"email": val})
 
     elif mode == "principal":
-        # Normal format: name, email, phone, college
         with open(filepath, newline="", encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 email = row.get("email", "").strip()
                 if "@" in email and "." in email and email not in seen:
                     seen.add(email)
-                    recipients.append({
-                        "email":   email,
-                        "name":    row.get("name", "").strip(),
-                        "college": row.get("college", "").strip()
-                    })
+                    recipients.append({"email": email})
 
     print(f"Loaded {len(recipients)} {mode} recipients")
     return recipients
@@ -248,42 +236,15 @@ def log_error(email, error):
         f.write(f"{ts} | {email} | {error}\n")
 
 # ════════════════════════════════════════════════
-#  BUILD EMAIL WITH ATTACHMENTS
-# ════════════════════════════════════════════════
-
-def build_email(from_email, to_email, subject, body):
-    msg = MIMEMultipart("mixed")
-    msg["Subject"] = subject
-    msg["From"]    = f"VaultSphere AI <{from_email}>"
-    msg["To"]      = to_email
-    msg.attach(MIMEText(body, "plain", "utf-8"))
-
-    # Attach logo
-    if os.path.exists(LOGO_PATH):
-        with open(LOGO_PATH, "rb") as f:
-            logo = MIMEImage(f.read())
-            logo.add_header("Content-Disposition", "attachment",
-                            filename="VaultSphere_Logo.png")
-            msg.attach(logo)
-
-    # Attach brochure
-    if os.path.exists(BROCHURE_PATH):
-        with open(BROCHURE_PATH, "rb") as f:
-            brochure = MIMEBase("application", "octet-stream")
-            brochure.set_payload(f.read())
-            encoders.encode_base64(brochure)
-            brochure.add_header("Content-Disposition", "attachment",
-                                filename="VaultSphere_Internship_Brochure.pdf")
-            msg.attach(brochure)
-
-    return msg
-
-# ════════════════════════════════════════════════
 #  SEND ONE EMAIL
 # ════════════════════════════════════════════════
 
 def send_one(from_email, from_pass, to_email, subject, body):
-    msg = build_email(from_email, to_email, subject, body)
+    msg = MIMEMultipart()
+    msg["Subject"] = subject
+    msg["From"]    = f"VaultSphere AI <{from_email}>"
+    msg["To"]      = to_email
+    msg.attach(MIMEText(body, "plain", "utf-8"))
     with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, timeout=15) as server:
         server.login(from_email, from_pass)
         server.sendmail(from_email, to_email, msg.as_string())
@@ -360,7 +321,6 @@ def run():
     warmup_limit, day_no = get_warmup_limit()
     accounts             = load_accounts()
 
-    # Principals get 10% of daily limit (fewer but important)
     principal_limit = max(10, warmup_limit // 10)
     student_limit   = warmup_limit - principal_limit
 
@@ -384,7 +344,7 @@ def run():
                             PRINCIPAL_SUBJECT, PRINCIPAL_BODY,
                             "principal", principal_limit)
     else:
-        print("⚠️  data/principals.csv not found")
+        print("⚠️  data/principals.csv not found — skipping")
 
     print(f"\n{'='*50}")
     print(f"  Day {day_no} Complete | Total sent today: {total}")

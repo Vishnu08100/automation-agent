@@ -16,7 +16,9 @@ SMTP_HOST           = "smtp.hostinger.com"
 SMTP_PORT           = 465
 START_DATE          = "2026-03-29"
 
-STUDENTS_FILE       = "data/students.csv"
+TEST_MODE           = True   # ← True = only principals, False = both
+
+STUDENTS_FILE       = "data/students.csv" if not TEST_MODE else ""
 PRINCIPALS_FILE     = "data/principals.csv"
 
 SENT_STUDENTS_LOG   = "output/sent_students.txt"

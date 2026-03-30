@@ -34,147 +34,71 @@ STUDENT_SUBJECT = "Summer Short-Term Internship – Registrations Now Live | Vau
 STUDENT_HTML = """
 <html>
 <body style="font-family: Arial, sans-serif; font-size: 15px; color: #222222; line-height: 1.7;">
-
 <p>Dear Student,</p>
-
 <p>Greetings from <strong>VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED!</strong></p>
-
 <p>We are pleased to introduce our Industry-Integrated Short-Term Internship Program, designed to equip students with hands-on experience in emerging technologies and enhance their industry readiness.</p>
-
 <p>🎓 SHORT-TERM INTERNSHIP ALERT FOR ENGINEERING &amp; DEGREE STUDENTS<br>
 Registrations are now LIVE for our Summer Short-Term Internship Program 🚀</p>
-
-<p>
-- Program Details: <a href="https://vaultsphereai.in/internship/internship_registration.html">https://vaultsphereai.in/internship/internship_registration.html</a><br>
-- Start Date: First week of May
-</p>
-
+<p>- Program Details: <a href="https://vaultsphereai.in/internship/internship_registration.html">https://vaultsphereai.in/internship/internship_registration.html</a><br>
+- Start Date: First week of May</p>
 <p><strong>💻 Available Domains:</strong></p>
-<p>
-AI &amp; ML<br>
-Data Science<br>
-Data Analytics<br>
-Java Fullstack Development<br>
-Web Development<br>
-Python for AI &amp; Automation<br>
-Cloud Computing &amp; DevOps<br>
-Cybersecurity, Digital Forensics &amp; Social Media Forensics<br>
-Embedded Systems<br>
-IoT (Internet of Things)<br>
-VLSI Designing<br>
-Industrial Automation<br>
-Power Generation, Transmission &amp; Distribution<br>
-UI/UX Design &amp; Graphic Designing<br>
-Digital Marketing<br>
-SAP (R to R)<br>
-Medical Coding
-</p>
-
+<p>AI &amp; ML<br>Data Science<br>Data Analytics<br>Java Fullstack Development<br>Web Development<br>Python for AI &amp; Automation<br>Cloud Computing &amp; DevOps<br>Cybersecurity, Digital Forensics &amp; Social Media Forensics<br>Embedded Systems<br>IoT (Internet of Things)<br>VLSI Designing<br>Industrial Automation<br>Power Generation, Transmission &amp; Distribution<br>UI/UX Design &amp; Graphic Designing<br>Digital Marketing<br>SAP (R to R)<br>Medical Coding</p>
 <p><strong>⏳ Duration: 2 Months | 2 Hours per Day</strong><br>
 <strong>📜 Internship Certificate + Project Review</strong><br>
 <strong>🤝 Placement Assistance &amp; Interview Opportunities</strong><br>
 <strong>⚠️ Limited Slots – First Come First Serve</strong></p>
-
 <p><strong>Note:</strong><br>
 • Faculty members can also enrol in these programs<br>
 • A Course Completion Certificate will be provided at a nominal fee<br>
 • All sessions are conducted LIVE and are mentored by industry experts</p>
-
 <p>We kindly request you to circulate this information among your students and encourage them to take advantage of this valuable opportunity.</p>
-
 <p>For further details, please contact:<br>
 • Support: <a href="mailto:support@vaultsphereai.com">support@vaultsphereai.com</a><br>
 • Mobile: +91 9618013827, +91 8106975810</p>
-
 <p><strong>HR Contact:</strong><br>
-K S Deepthi<br>
-HR Manager<br>
-VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED<br>
+K S Deepthi<br>HR Manager<br>VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED<br>
 📧 <a href="mailto:hr@vaultsphereai.com">hr@vaultsphereai.com</a><br>
 📞 +91 7353078181<br>
 🌐 <a href="http://www.vaultsphereai.in">www.vaultsphereai.in</a></p>
-
 <p>We look forward to your support in empowering students with industry-relevant skills and improving their employability.</p>
-
-<p>Warm regards,<br>
-<strong>VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED</strong></p>
-
+<p>Warm regards,<br><strong>VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED</strong></p>
 </body>
 </html>
 """
-
-# ────────────────────────────────────────────────
 
 PRINCIPAL_SUBJECT = "Industry-Integrated Internship Program for Your Students – VaultSphere AI"
 
 PRINCIPAL_HTML = """
 <html>
 <body style="font-family: Arial, sans-serif; font-size: 15px; color: #222222; line-height: 1.7;">
-
 <p>Dear Sir/Madam,</p>
-
 <p>Greetings from <strong>VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED!</strong></p>
-
 <p>We are pleased to introduce our Industry-Integrated Short-Term Internship Program, designed to equip students with hands-on experience in emerging technologies and enhance their industry readiness.</p>
-
 <p>🎓 SHORT-TERM INTERNSHIP ALERT FOR ENGINEERING &amp; DEGREE STUDENTS<br>
 Registrations are now LIVE for our Summer Short-Term Internship Program 🚀</p>
-
-<p>
-- Program Details: <a href="https://vaultsphereai.in/internship/internship_registration.html">https://vaultsphereai.in/internship/internship_registration.html</a><br>
-- Start Date: First week of May
-</p>
-
+<p>- Program Details: <a href="https://vaultsphereai.in/internship/internship_registration.html">https://vaultsphereai.in/internship/internship_registration.html</a><br>
+- Start Date: First week of May</p>
 <p><strong>💻 Available Domains:</strong></p>
-<p>
-AI &amp; ML<br>
-Data Science<br>
-Data Analytics<br>
-Java Fullstack Development<br>
-Web Development<br>
-Python for AI &amp; Automation<br>
-Cloud Computing &amp; DevOps<br>
-Cybersecurity, Digital Forensics &amp; Social Media Forensics<br>
-Embedded Systems<br>
-IoT (Internet of Things)<br>
-VLSI Designing<br>
-Industrial Automation<br>
-Power Generation, Transmission &amp; Distribution<br>
-UI/UX Design &amp; Graphic Designing<br>
-Digital Marketing<br>
-SAP (R to R)<br>
-Medical Coding
-</p>
-
+<p>AI &amp; ML<br>Data Science<br>Data Analytics<br>Java Fullstack Development<br>Web Development<br>Python for AI &amp; Automation<br>Cloud Computing &amp; DevOps<br>Cybersecurity, Digital Forensics &amp; Social Media Forensics<br>Embedded Systems<br>IoT (Internet of Things)<br>VLSI Designing<br>Industrial Automation<br>Power Generation, Transmission &amp; Distribution<br>UI/UX Design &amp; Graphic Designing<br>Digital Marketing<br>SAP (R to R)<br>Medical Coding</p>
 <p><strong>⏳ Duration: 2 Months | 2 Hours per Day</strong><br>
 <strong>📜 Internship Certificate + Project Review</strong><br>
 <strong>🤝 Placement Assistance &amp; Interview Opportunities</strong><br>
 <strong>⚠️ Limited Slots – First Come First Serve</strong></p>
-
 <p><strong>Note:</strong><br>
 • Faculty members can also enrol in these programs<br>
 • A Course Completion Certificate will be provided at a nominal fee<br>
 • All sessions are conducted LIVE and are mentored by industry experts</p>
-
 <p>We kindly request you to circulate this information among your students and encourage them to take advantage of this valuable opportunity.</p>
-
 <p>For further details, please contact:<br>
 • Support: <a href="mailto:support@vaultsphereai.com">support@vaultsphereai.com</a><br>
 • Mobile: +91 9618013827, +91 8106975810</p>
-
 <p><strong>HR Contact:</strong><br>
-K S Deepthi<br>
-HR Manager<br>
-VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED<br>
+K S Deepthi<br>HR Manager<br>VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED<br>
 📧 <a href="mailto:hr@vaultsphereai.com">hr@vaultsphereai.com</a><br>
 📞 +91 7353078181<br>
 🌐 <a href="http://www.vaultsphereai.in">www.vaultsphereai.in</a></p>
-
 <p>We look forward to your support in empowering students with industry-relevant skills and improving their employability.</p>
-
-<p>Warm regards,<br>
-<strong>VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED</strong></p>
-
+<p>Warm regards,<br><strong>VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED</strong></p>
 </body>
 </html>
 """
@@ -276,7 +200,7 @@ def send_one(from_email, from_pass, to_email, subject, html_body):
         server.sendmail(from_email, to_email, msg.as_string())
 
 # ════════════════════════════════════════════════
-#  SEND BATCH
+#  SEND BATCH — Fixed Rotation + Rate Limit Switch
 # ════════════════════════════════════════════════
 
 def send_batch(accounts, recipients, sent_log, subject, html_body, label, limit):
@@ -298,21 +222,26 @@ def send_batch(accounts, recipients, sent_log, subject, html_body, label, limit)
     total_sent   = 0
     total_failed = 0
 
-    for recipient in batch:
+    i = 0  # recipient index — controlled manually for retry on account switch
 
+    while i < len(batch):
+
+        # ── Find next available account ──────────
         while acc_index < len(accounts):
             acc_limit = accounts[acc_index].get("limit", 100)
             if acc_sent[acc_index] < acc_limit:
                 break
-            print(f"  Account {acc_index+1} hit limit → switching")
+            print(f"  Account {acc_index+1} hit limit → switching to {acc_index+2}")
             acc_index += 1
 
+        # ── All accounts exhausted ───────────────
         if acc_index >= len(accounts):
             print(f"  All accounts exhausted for today.")
             break
 
-        account = accounts[acc_index]
-        email   = recipient["email"]
+        account   = accounts[acc_index]
+        recipient = batch[i]
+        email     = recipient["email"]
 
         try:
             send_one(account["user"], account["pass"], email, subject, html_body)
@@ -322,17 +251,36 @@ def send_batch(accounts, recipients, sent_log, subject, html_body, label, limit)
             print(f"  [{total_sent:04d}] Sent → {email} "
                   f"| Acc {acc_index+1} "
                   f"({acc_sent[acc_index]}/{account.get('limit',100)})")
+            i += 1  # move to next recipient only on success
 
         except smtplib.SMTPAuthenticationError:
-            print(f"  AUTH FAILED: {account['user']} → skipping")
+            # Wrong password → skip this account, retry same email with next
+            print(f"  AUTH FAILED: {account['user']} → switching account, retrying {email}")
             acc_index += 1
+            # do NOT increment i → same email retried with next account
+
+        except smtplib.SMTPException as e:
+            error_str = str(e)
+            if "ratelimit" in error_str.lower() or "451" in error_str or "450" in error_str:
+                # Rate limit hit → switch account, retry same email
+                print(f"  RATE LIMIT: {account['user']} → switching to next account, retrying {email}")
+                acc_index += 1
+                time.sleep(3)
+                # do NOT increment i → same email retried with next account
+            else:
+                # Other SMTP error → log and move on
+                total_failed += 1
+                log_error(email, error_str)
+                print(f"  SMTP ERROR → {email} | {e}")
+                i += 1
 
         except Exception as e:
             total_failed += 1
             log_error(email, str(e))
             print(f"  FAILED → {email} | {e}")
+            i += 1
 
-        time.sleep(random.uniform(8, 15))
+        time.sleep(random.uniform(5, 10))
 
     print(f"\n  Done → Sent: {total_sent} | Failed: {total_failed}")
     print(f"  Remaining tomorrow: {len(pending) - total_sent}")

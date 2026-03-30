@@ -11,3 +11,12 @@ principal.Q0@jntua.ac.in
 principal.Q1@jntua.ac.in
 principal.42@jntua.ac.in
 principal.M7@jntua.ac.in
+principal.4T@jntua.ac.in
+principal.DC@jntua.ac.in
+principal.4U@jntua.ac.in
+principal.Y0@jntua.ac.in
+principal.ER@jntua.ac.in
+principal.KJ@jntua.ac.in
+principal.4R@jntua.ac.in
+principal.Q2@jntua.ac.in
+principal.HC@jntua.ac.in

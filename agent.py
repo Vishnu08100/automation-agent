@@ -7,6 +7,7 @@ import random
 import datetime
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from email.mime.image import MIMEImage
 
 # ════════════════════════════════════════════════
 #  CONFIG
@@ -24,6 +25,8 @@ PRINCIPALS_FILE     = "data/principals.csv"
 SENT_STUDENTS_LOG   = "output/sent_students.txt"
 SENT_PRINCIPALS_LOG = "output/sent_principals.txt"
 ERROR_LOG           = "output/error_log.txt"
+
+BROCHURE_PATH       = "attachments/brochure.jpg"   # your image file name
 
 # ════════════════════════════════════════════════
 #  EMAIL TEMPLATES — HTML FORMAT
@@ -186,15 +189,40 @@ def log_error(email, error):
         f.write(f"{ts} | {email} | {error}\n")
 
 # ════════════════════════════════════════════════
+#  BUILD EMAIL WITH IMAGE ATTACHMENT
+# ════════════════════════════════════════════════
+
+def build_message(from_email, to_email, subject, html_body):
+    msg = MIMEMultipart("mixed")
+    msg["Subject"] = subject
+    msg["From"]    = f"VaultSphere AI <{from_email}>"
+    msg["To"]      = to_email
+
+    # HTML body
+    msg.attach(MIMEText(html_body, "html", "utf-8"))
+
+    # Attach brochure image if file exists
+    if os.path.exists(BROCHURE_PATH):
+        with open(BROCHURE_PATH, "rb") as f:
+            img = MIMEImage(f.read())
+            img.add_header(
+                "Content-Disposition",
+                "attachment",
+                filename="VaultSphere_Internship.jpg"
+            )
+            msg.attach(img)
+        print(f"    + Brochure attached")
+    else:
+        print(f"    ! Brochure not found at {BROCHURE_PATH} — sending without it")
+
+    return msg
+
+# ════════════════════════════════════════════════
 #  SEND ONE EMAIL
 # ════════════════════════════════════════════════
 
 def send_one(from_email, from_pass, to_email, subject, html_body):
-    msg = MIMEMultipart("alternative")
-    msg["Subject"] = subject
-    msg["From"]    = f"VaultSphere AI <{from_email}>"
-    msg["To"]      = to_email
-    msg.attach(MIMEText(html_body, "html", "utf-8"))
+    msg = build_message(from_email, to_email, subject, html_body)
     with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, timeout=15) as server:
         server.login(from_email, from_pass)
         server.sendmail(from_email, to_email, msg.as_string())
@@ -221,12 +249,11 @@ def send_batch(accounts, recipients, sent_log, subject, html_body, label, limit)
     acc_sent     = [0] * len(accounts)
     total_sent   = 0
     total_failed = 0
-
-    i = 0  # recipient index — controlled manually for retry on account switch
+    i            = 0  # controlled manually for retry on account switch
 
     while i < len(batch):
 
-        # ── Find next available account ──────────
+        # Find next available account
         while acc_index < len(accounts):
             acc_limit = accounts[acc_index].get("limit", 100)
             if acc_sent[acc_index] < acc_limit:
@@ -234,14 +261,13 @@ def send_batch(accounts, recipients, sent_log, subject, html_body, label, limit)
             print(f"  Account {acc_index+1} hit limit → switching to {acc_index+2}")
             acc_index += 1
 
-        # ── All accounts exhausted ───────────────
+        # All accounts exhausted
         if acc_index >= len(accounts):
             print(f"  All accounts exhausted for today.")
             break
 
-        account   = accounts[acc_index]
-        recipient = batch[i]
-        email     = recipient["email"]
+        account = accounts[acc_index]
+        email   = batch[i]["email"]
 
         try:
             send_one(account["user"], account["pass"], email, subject, html_body)
@@ -251,24 +277,21 @@ def send_batch(accounts, recipients, sent_log, subject, html_body, label, limit)
             print(f"  [{total_sent:04d}] Sent → {email} "
                   f"| Acc {acc_index+1} "
                   f"({acc_sent[acc_index]}/{account.get('limit',100)})")
-            i += 1  # move to next recipient only on success
+            i += 1  # success → next recipient
 
         except smtplib.SMTPAuthenticationError:
-            # Wrong password → skip this account, retry same email with next
-            print(f"  AUTH FAILED: {account['user']} → switching account, retrying {email}")
+            # Wrong password → skip account, retry same email
+            print(f"  AUTH FAILED: {account['user']} → switching, retrying {email}")
             acc_index += 1
-            # do NOT increment i → same email retried with next account
 
         except smtplib.SMTPException as e:
             error_str = str(e)
             if "ratelimit" in error_str.lower() or "451" in error_str or "450" in error_str:
-                # Rate limit hit → switch account, retry same email
-                print(f"  RATE LIMIT: {account['user']} → switching to next account, retrying {email}")
+                # Rate limit → switch account, retry same email
+                print(f"  RATE LIMIT: {account['user']} → switching, retrying {email}")
                 acc_index += 1
                 time.sleep(3)
-                # do NOT increment i → same email retried with next account
             else:
-                # Other SMTP error → log and move on
                 total_failed += 1
                 log_error(email, error_str)
                 print(f"  SMTP ERROR → {email} | {e}")
@@ -299,7 +322,6 @@ def run():
 
     total = 0
 
-    # Send to STUDENTS
     if STUDENTS_FILE and os.path.exists(STUDENTS_FILE):
         students = load_recipients(STUDENTS_FILE, "student")
         total += send_batch(accounts, students,
@@ -309,7 +331,6 @@ def run():
     else:
         print("Skipping students (TEST_MODE or file not found)")
 
-    # Send to PRINCIPALS
     if os.path.exists(PRINCIPALS_FILE):
         principals = load_recipients(PRINCIPALS_FILE, "principal")
         total += send_batch(accounts, principals,

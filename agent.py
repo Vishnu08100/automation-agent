@@ -5,9 +5,9 @@ import os
 import json
 import random
 import datetime
+import base64
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from email.mime.image import MIMEImage
 
 # ════════════════════════════════════════════════
 #  CONFIG
@@ -17,7 +17,7 @@ SMTP_HOST           = "smtp.hostinger.com"
 SMTP_PORT           = 465
 START_DATE          = "2026-03-29"
 
-TEST_MODE           = True   # True = only principals | False = both
+TEST_MODE           = False  # False = sends to BOTH students + principals
 
 STUDENTS_FILE       = "data/students.csv" if not TEST_MODE else ""
 PRINCIPALS_FILE     = "data/principals.csv"
@@ -26,85 +26,110 @@ SENT_STUDENTS_LOG   = "output/sent_students.txt"
 SENT_PRINCIPALS_LOG = "output/sent_principals.txt"
 ERROR_LOG           = "output/error_log.txt"
 
-BROCHURE_PATH       = "attachments/brochure.jpg"   # your image file name
+BROCHURE_PATH       = "attachments/brochure.jpg"
 
 # ════════════════════════════════════════════════
-#  EMAIL TEMPLATES — HTML FORMAT
+#  LOAD BROCHURE AS BASE64 (for inline image)
 # ════════════════════════════════════════════════
 
-STUDENT_SUBJECT = "Summer Short-Term Internship – Registrations Now Live | VaultSphere AI"
+def get_brochure_base64():
+    if os.path.exists(BROCHURE_PATH):
+        with open(BROCHURE_PATH, "rb") as f:
+            data = base64.b64encode(f.read()).decode("utf-8")
+        print("Brochure loaded for inline display")
+        return data
+    print(f"! Brochure not found at {BROCHURE_PATH}")
+    return None
 
-STUDENT_HTML = """
+# ════════════════════════════════════════════════
+#  EMAIL TEMPLATES — HTML WITH INLINE IMAGE
+# ════════════════════════════════════════════════
+
+def build_html(greeting, brochure_b64):
+    # Inline image tag — shows image directly in email body
+    image_tag = ""
+    if brochure_b64:
+        image_tag = f"""
+<div style="text-align:center; margin: 20px 0;">
+  <img src="data:image/jpeg;base64,{brochure_b64}"
+       alt="VaultSphere Internship Brochure"
+       style="max-width:600px; width:100%; border-radius:8px;" />
+</div>"""
+
+    return f"""
 <html>
 <body style="font-family: Arial, sans-serif; font-size: 15px; color: #222222; line-height: 1.7;">
-<p>Dear Student,</p>
+
+<p>{greeting}</p>
+
 <p>Greetings from <strong>VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED!</strong></p>
-<p>We are pleased to introduce our Industry-Integrated Short-Term Internship Program, designed to equip students with hands-on experience in emerging technologies and enhance their industry readiness.</p>
+
+<p>We are pleased to introduce our Industry-Integrated Short-Term Internship Program,
+designed to equip students with hands-on experience in emerging technologies and
+enhance their industry readiness.</p>
+
 <p>🎓 SHORT-TERM INTERNSHIP ALERT FOR ENGINEERING &amp; DEGREE STUDENTS<br>
 Registrations are now LIVE for our Summer Short-Term Internship Program 🚀</p>
-<p>- Program Details: <a href="https://vaultsphereai.in/internship/internship_registration.html">https://vaultsphereai.in/internship/internship_registration.html</a><br>
-- Start Date: First week of May</p>
+
+<p>
+- Program Details:
+<a href="https://vaultsphereai.in/internship/internship_registration.html">
+https://vaultsphereai.in/internship/internship_registration.html</a><br>
+- Start Date: First week of May
+</p>
+
+{image_tag}
+
 <p><strong>💻 Available Domains:</strong></p>
-<p>AI &amp; ML<br>Data Science<br>Data Analytics<br>Java Fullstack Development<br>Web Development<br>Python for AI &amp; Automation<br>Cloud Computing &amp; DevOps<br>Cybersecurity, Digital Forensics &amp; Social Media Forensics<br>Embedded Systems<br>IoT (Internet of Things)<br>VLSI Designing<br>Industrial Automation<br>Power Generation, Transmission &amp; Distribution<br>UI/UX Design &amp; Graphic Designing<br>Digital Marketing<br>SAP (R to R)<br>Medical Coding</p>
-<p><strong>⏳ Duration: 2 Months | 2 Hours per Day</strong><br>
+<p>
+AI &amp; ML<br>Data Science<br>Data Analytics<br>
+Java Fullstack Development<br>Web Development<br>
+Python for AI &amp; Automation<br>Cloud Computing &amp; DevOps<br>
+Cybersecurity, Digital Forensics &amp; Social Media Forensics<br>
+Embedded Systems<br>IoT (Internet of Things)<br>VLSI Designing<br>
+Industrial Automation<br>Power Generation, Transmission &amp; Distribution<br>
+UI/UX Design &amp; Graphic Designing<br>Digital Marketing<br>
+SAP (R to R)<br>Medical Coding
+</p>
+
+<p>
+<strong>⏳ Duration: 2 Months | 2 Hours per Day</strong><br>
 <strong>📜 Internship Certificate + Project Review</strong><br>
 <strong>🤝 Placement Assistance &amp; Interview Opportunities</strong><br>
-<strong>⚠️ Limited Slots – First Come First Serve</strong></p>
+<strong>⚠️ Limited Slots – First Come First Serve</strong>
+</p>
+
 <p><strong>Note:</strong><br>
 • Faculty members can also enrol in these programs<br>
 • A Course Completion Certificate will be provided at a nominal fee<br>
 • All sessions are conducted LIVE and are mentored by industry experts</p>
-<p>We kindly request you to circulate this information among your students and encourage them to take advantage of this valuable opportunity.</p>
+
+<p>We kindly request you to circulate this information among your students
+and encourage them to take advantage of this valuable opportunity.</p>
+
 <p>For further details, please contact:<br>
 • Support: <a href="mailto:support@vaultsphereai.com">support@vaultsphereai.com</a><br>
 • Mobile: +91 9618013827, +91 8106975810</p>
+
 <p><strong>HR Contact:</strong><br>
-K S Deepthi<br>HR Manager<br>VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED<br>
+K S Deepthi<br>
+HR Manager<br>
+VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED<br>
 📧 <a href="mailto:hr@vaultsphereai.com">hr@vaultsphereai.com</a><br>
 📞 +91 7353078181<br>
 🌐 <a href="http://www.vaultsphereai.in">www.vaultsphereai.in</a></p>
-<p>We look forward to your support in empowering students with industry-relevant skills and improving their employability.</p>
-<p>Warm regards,<br><strong>VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED</strong></p>
-</body>
-</html>
-"""
 
+<p>We look forward to your support in empowering students with
+industry-relevant skills and improving their employability.</p>
+
+<p>Warm regards,<br>
+<strong>VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED</strong></p>
+
+</body>
+</html>"""
+
+STUDENT_SUBJECT   = "Summer Short-Term Internship – Registrations Now Live | VaultSphere AI"
 PRINCIPAL_SUBJECT = "Industry-Integrated Internship Program for Your Students – VaultSphere AI"
-
-PRINCIPAL_HTML = """
-<html>
-<body style="font-family: Arial, sans-serif; font-size: 15px; color: #222222; line-height: 1.7;">
-<p>Dear Sir/Madam,</p>
-<p>Greetings from <strong>VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED!</strong></p>
-<p>We are pleased to introduce our Industry-Integrated Short-Term Internship Program, designed to equip students with hands-on experience in emerging technologies and enhance their industry readiness.</p>
-<p>🎓 SHORT-TERM INTERNSHIP ALERT FOR ENGINEERING &amp; DEGREE STUDENTS<br>
-Registrations are now LIVE for our Summer Short-Term Internship Program 🚀</p>
-<p>- Program Details: <a href="https://vaultsphereai.in/internship/internship_registration.html">https://vaultsphereai.in/internship/internship_registration.html</a><br>
-- Start Date: First week of May</p>
-<p><strong>💻 Available Domains:</strong></p>
-<p>AI &amp; ML<br>Data Science<br>Data Analytics<br>Java Fullstack Development<br>Web Development<br>Python for AI &amp; Automation<br>Cloud Computing &amp; DevOps<br>Cybersecurity, Digital Forensics &amp; Social Media Forensics<br>Embedded Systems<br>IoT (Internet of Things)<br>VLSI Designing<br>Industrial Automation<br>Power Generation, Transmission &amp; Distribution<br>UI/UX Design &amp; Graphic Designing<br>Digital Marketing<br>SAP (R to R)<br>Medical Coding</p>
-<p><strong>⏳ Duration: 2 Months | 2 Hours per Day</strong><br>
-<strong>📜 Internship Certificate + Project Review</strong><br>
-<strong>🤝 Placement Assistance &amp; Interview Opportunities</strong><br>
-<strong>⚠️ Limited Slots – First Come First Serve</strong></p>
-<p><strong>Note:</strong><br>
-• Faculty members can also enrol in these programs<br>
-• A Course Completion Certificate will be provided at a nominal fee<br>
-• All sessions are conducted LIVE and are mentored by industry experts</p>
-<p>We kindly request you to circulate this information among your students and encourage them to take advantage of this valuable opportunity.</p>
-<p>For further details, please contact:<br>
-• Support: <a href="mailto:support@vaultsphereai.com">support@vaultsphereai.com</a><br>
-• Mobile: +91 9618013827, +91 8106975810</p>
-<p><strong>HR Contact:</strong><br>
-K S Deepthi<br>HR Manager<br>VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED<br>
-📧 <a href="mailto:hr@vaultsphereai.com">hr@vaultsphereai.com</a><br>
-📞 +91 7353078181<br>
-🌐 <a href="http://www.vaultsphereai.in">www.vaultsphereai.in</a></p>
-<p>We look forward to your support in empowering students with industry-relevant skills and improving their employability.</p>
-<p>Warm regards,<br><strong>VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED</strong></p>
-</body>
-</html>
-"""
 
 # ════════════════════════════════════════════════
 #  WARM-UP LIMIT
@@ -120,7 +145,7 @@ def get_warmup_limit():
     elif day_no <= 14:  limit = 500
     elif day_no <= 21:  limit = 1500
     elif day_no <= 30:  limit = 4000
-    else:               limit = 5700
+    else:               limit = 7700   # 57×100 + 2×1000
 
     print(f"Day {day_no} → Today's total limit: {limit}")
     return limit, day_no
@@ -189,46 +214,21 @@ def log_error(email, error):
         f.write(f"{ts} | {email} | {error}\n")
 
 # ════════════════════════════════════════════════
-#  BUILD EMAIL WITH IMAGE ATTACHMENT
-# ════════════════════════════════════════════════
-
-def build_message(from_email, to_email, subject, html_body):
-    msg = MIMEMultipart("mixed")
-    msg["Subject"] = subject
-    msg["From"]    = f"VaultSphere AI <{from_email}>"
-    msg["To"]      = to_email
-
-    # HTML body
-    msg.attach(MIMEText(html_body, "html", "utf-8"))
-
-    # Attach brochure image if file exists
-    if os.path.exists(BROCHURE_PATH):
-        with open(BROCHURE_PATH, "rb") as f:
-            img = MIMEImage(f.read())
-            img.add_header(
-                "Content-Disposition",
-                "attachment",
-                filename="VaultSphere_Internship.jpg"
-            )
-            msg.attach(img)
-        print(f"    + Brochure attached")
-    else:
-        print(f"    ! Brochure not found at {BROCHURE_PATH} — sending without it")
-
-    return msg
-
-# ════════════════════════════════════════════════
 #  SEND ONE EMAIL
 # ════════════════════════════════════════════════
 
 def send_one(from_email, from_pass, to_email, subject, html_body):
-    msg = build_message(from_email, to_email, subject, html_body)
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = subject
+    msg["From"]    = f"VaultSphere AI <{from_email}>"
+    msg["To"]      = to_email
+    msg.attach(MIMEText(html_body, "html", "utf-8"))
     with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, timeout=15) as server:
         server.login(from_email, from_pass)
         server.sendmail(from_email, to_email, msg.as_string())
 
 # ════════════════════════════════════════════════
-#  SEND BATCH — Fixed Rotation + Rate Limit Switch
+#  SEND BATCH
 # ════════════════════════════════════════════════
 
 def send_batch(accounts, recipients, sent_log, subject, html_body, label, limit):
@@ -249,11 +249,11 @@ def send_batch(accounts, recipients, sent_log, subject, html_body, label, limit)
     acc_sent     = [0] * len(accounts)
     total_sent   = 0
     total_failed = 0
-    i            = 0  # controlled manually for retry on account switch
+    i            = 0
 
     while i < len(batch):
 
-        # Find next available account
+        # Find available account
         while acc_index < len(accounts):
             acc_limit = accounts[acc_index].get("limit", 100)
             if acc_sent[acc_index] < acc_limit:
@@ -261,7 +261,6 @@ def send_batch(accounts, recipients, sent_log, subject, html_body, label, limit)
             print(f"  Account {acc_index+1} hit limit → switching to {acc_index+2}")
             acc_index += 1
 
-        # All accounts exhausted
         if acc_index >= len(accounts):
             print(f"  All accounts exhausted for today.")
             break
@@ -277,17 +276,15 @@ def send_batch(accounts, recipients, sent_log, subject, html_body, label, limit)
             print(f"  [{total_sent:04d}] Sent → {email} "
                   f"| Acc {acc_index+1} "
                   f"({acc_sent[acc_index]}/{account.get('limit',100)})")
-            i += 1  # success → next recipient
+            i += 1
 
         except smtplib.SMTPAuthenticationError:
-            # Wrong password → skip account, retry same email
             print(f"  AUTH FAILED: {account['user']} → switching, retrying {email}")
             acc_index += 1
 
         except smtplib.SMTPException as e:
             error_str = str(e)
             if "ratelimit" in error_str.lower() or "451" in error_str or "450" in error_str:
-                # Rate limit → switch account, retry same email
                 print(f"  RATE LIMIT: {account['user']} → switching, retrying {email}")
                 acc_index += 1
                 time.sleep(3)
@@ -316,26 +313,33 @@ def send_batch(accounts, recipients, sent_log, subject, html_body, label, limit)
 def run():
     warmup_limit, day_no = get_warmup_limit()
     accounts             = load_accounts()
+    brochure_b64         = get_brochure_base64()
+
+    # Build HTML with inline image for both templates
+    student_html   = build_html("Dear Student,",    brochure_b64)
+    principal_html = build_html("Dear Sir/Madam,",  brochure_b64)
 
     principal_limit = max(10, warmup_limit // 10)
     student_limit   = warmup_limit - principal_limit
 
     total = 0
 
+    # Send to STUDENTS
     if STUDENTS_FILE and os.path.exists(STUDENTS_FILE):
         students = load_recipients(STUDENTS_FILE, "student")
         total += send_batch(accounts, students,
                             SENT_STUDENTS_LOG,
-                            STUDENT_SUBJECT, STUDENT_HTML,
+                            STUDENT_SUBJECT, student_html,
                             "student", student_limit)
     else:
         print("Skipping students (TEST_MODE or file not found)")
 
+    # Send to PRINCIPALS
     if os.path.exists(PRINCIPALS_FILE):
         principals = load_recipients(PRINCIPALS_FILE, "principal")
         total += send_batch(accounts, principals,
                             SENT_PRINCIPALS_LOG,
-                            PRINCIPAL_SUBJECT, PRINCIPAL_HTML,
+                            PRINCIPAL_SUBJECT, principal_html,
                             "principal", principal_limit)
     else:
         print("data/principals.csv not found — skipping")

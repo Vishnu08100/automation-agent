@@ -16,7 +16,7 @@ SMTP_HOST           = "smtp.hostinger.com"
 SMTP_PORT           = 465
 START_DATE          = "2026-03-29"
 
-TEST_MODE           = True   # ← True = only principals, False = both
+TEST_MODE           = True   # True = only principals | False = both
 
 STUDENTS_FILE       = "data/students.csv" if not TEST_MODE else ""
 PRINCIPALS_FILE     = "data/principals.csv"
@@ -26,134 +26,158 @@ SENT_PRINCIPALS_LOG = "output/sent_principals.txt"
 ERROR_LOG           = "output/error_log.txt"
 
 # ════════════════════════════════════════════════
-#  EMAIL TEMPLATES
+#  EMAIL TEMPLATES — HTML FORMAT
 # ════════════════════════════════════════════════
 
 STUDENT_SUBJECT = "Summer Short-Term Internship – Registrations Now Live | VaultSphere AI"
 
-STUDENT_BODY = """Dear Student,
+STUDENT_HTML = """
+<html>
+<body style="font-family: Arial, sans-serif; font-size: 15px; color: #222222; line-height: 1.7;">
 
-Greetings from VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED!
+<p>Dear Student,</p>
 
-We are pleased to introduce our Industry-Integrated Short-Term Internship Program, designed to equip students with hands-on experience in emerging technologies and enhance their industry readiness.
+<p>Greetings from <strong>VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED!</strong></p>
 
-🎓 SHORT-TERM INTERNSHIP ALERT FOR ENGINEERING & DEGREE STUDENTS
-Registrations are now LIVE for our Summer Short-Term Internship Program 🚀
+<p>We are pleased to introduce our Industry-Integrated Short-Term Internship Program, designed to equip students with hands-on experience in emerging technologies and enhance their industry readiness.</p>
 
-- Program Details: https://vaultsphereai.in/internship/internship_registration.html
+<p>🎓 SHORT-TERM INTERNSHIP ALERT FOR ENGINEERING &amp; DEGREE STUDENTS<br>
+Registrations are now LIVE for our Summer Short-Term Internship Program 🚀</p>
+
+<p>
+- Program Details: <a href="https://vaultsphereai.in/internship/internship_registration.html">https://vaultsphereai.in/internship/internship_registration.html</a><br>
 - Start Date: First week of May
+</p>
 
-💻 Available Domains:
-AI & ML
-Data Science
-Data Analytics
-Java Fullstack Development
-Web Development
-Python for AI & Automation
-Cloud Computing & DevOps
-Cybersecurity, Digital Forensics & Social Media Forensics
-Embedded Systems
-IoT (Internet of Things)
-VLSI Designing
-Industrial Automation
-Power Generation, Transmission & Distribution
-UI/UX Design & Graphic Designing
-Digital Marketing
-SAP (R to R)
+<p><strong>💻 Available Domains:</strong></p>
+<p>
+AI &amp; ML<br>
+Data Science<br>
+Data Analytics<br>
+Java Fullstack Development<br>
+Web Development<br>
+Python for AI &amp; Automation<br>
+Cloud Computing &amp; DevOps<br>
+Cybersecurity, Digital Forensics &amp; Social Media Forensics<br>
+Embedded Systems<br>
+IoT (Internet of Things)<br>
+VLSI Designing<br>
+Industrial Automation<br>
+Power Generation, Transmission &amp; Distribution<br>
+UI/UX Design &amp; Graphic Designing<br>
+Digital Marketing<br>
+SAP (R to R)<br>
 Medical Coding
+</p>
 
-⏳ Duration: 2 Months | 2 Hours per Day
-📜 Internship Certificate + Project Review
-🤝 Placement Assistance & Interview Opportunities
-⚠️ Limited Slots – First Come First Serve
+<p><strong>⏳ Duration: 2 Months | 2 Hours per Day</strong><br>
+<strong>📜 Internship Certificate + Project Review</strong><br>
+<strong>🤝 Placement Assistance &amp; Interview Opportunities</strong><br>
+<strong>⚠️ Limited Slots – First Come First Serve</strong></p>
 
-Note:
-• Faculty members can also enrol in these programs
-• A Course Completion Certificate will be provided at a nominal fee
-• All sessions are conducted LIVE and are mentored by industry experts
+<p><strong>Note:</strong><br>
+• Faculty members can also enrol in these programs<br>
+• A Course Completion Certificate will be provided at a nominal fee<br>
+• All sessions are conducted LIVE and are mentored by industry experts</p>
 
-We kindly request you to circulate this information among your students and encourage them to take advantage of this valuable opportunity.
+<p>We kindly request you to circulate this information among your students and encourage them to take advantage of this valuable opportunity.</p>
 
-For further details, please contact:
-• Support: support@vaultsphereai.com
-• Mobile: +91 9618013827, +91 8106975810
+<p>For further details, please contact:<br>
+• Support: <a href="mailto:support@vaultsphereai.com">support@vaultsphereai.com</a><br>
+• Mobile: +91 9618013827, +91 8106975810</p>
 
-HR Contact:
-K S Deepthi
-HR Manager
-VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED
-📧 hr@vaultsphereai.com
-📞 +91 7353078181
-🌐 www.vaultsphereai.in
+<p><strong>HR Contact:</strong><br>
+K S Deepthi<br>
+HR Manager<br>
+VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED<br>
+📧 <a href="mailto:hr@vaultsphereai.com">hr@vaultsphereai.com</a><br>
+📞 +91 7353078181<br>
+🌐 <a href="http://www.vaultsphereai.in">www.vaultsphereai.in</a></p>
 
-We look forward to your support in empowering students with industry-relevant skills and improving their employability.
+<p>We look forward to your support in empowering students with industry-relevant skills and improving their employability.</p>
 
-Warm regards,
-VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED"""
+<p>Warm regards,<br>
+<strong>VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED</strong></p>
+
+</body>
+</html>
+"""
 
 # ────────────────────────────────────────────────
 
 PRINCIPAL_SUBJECT = "Industry-Integrated Internship Program for Your Students – VaultSphere AI"
 
-PRINCIPAL_BODY = """Dear Sir/Madam,
+PRINCIPAL_HTML = """
+<html>
+<body style="font-family: Arial, sans-serif; font-size: 15px; color: #222222; line-height: 1.7;">
 
-Greetings from VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED!
+<p>Dear Sir/Madam,</p>
 
-We are pleased to introduce our Industry-Integrated Short-Term Internship Program, designed to equip students with hands-on experience in emerging technologies and enhance their industry readiness.
+<p>Greetings from <strong>VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED!</strong></p>
 
-🎓 SHORT-TERM INTERNSHIP ALERT FOR ENGINEERING & DEGREE STUDENTS
-Registrations are now LIVE for our Summer Short-Term Internship Program 🚀
+<p>We are pleased to introduce our Industry-Integrated Short-Term Internship Program, designed to equip students with hands-on experience in emerging technologies and enhance their industry readiness.</p>
 
-- Program Details: https://vaultsphereai.in/internship/internship_registration.html
+<p>🎓 SHORT-TERM INTERNSHIP ALERT FOR ENGINEERING &amp; DEGREE STUDENTS<br>
+Registrations are now LIVE for our Summer Short-Term Internship Program 🚀</p>
+
+<p>
+- Program Details: <a href="https://vaultsphereai.in/internship/internship_registration.html">https://vaultsphereai.in/internship/internship_registration.html</a><br>
 - Start Date: First week of May
+</p>
 
-💻 Available Domains:
-AI & ML
-Data Science
-Data Analytics
-Java Fullstack Development
-Web Development
-Python for AI & Automation
-Cloud Computing & DevOps
-Cybersecurity, Digital Forensics & Social Media Forensics
-Embedded Systems
-IoT (Internet of Things)
-VLSI Designing
-Industrial Automation
-Power Generation, Transmission & Distribution
-UI/UX Design & Graphic Designing
-Digital Marketing
-SAP (R to R)
+<p><strong>💻 Available Domains:</strong></p>
+<p>
+AI &amp; ML<br>
+Data Science<br>
+Data Analytics<br>
+Java Fullstack Development<br>
+Web Development<br>
+Python for AI &amp; Automation<br>
+Cloud Computing &amp; DevOps<br>
+Cybersecurity, Digital Forensics &amp; Social Media Forensics<br>
+Embedded Systems<br>
+IoT (Internet of Things)<br>
+VLSI Designing<br>
+Industrial Automation<br>
+Power Generation, Transmission &amp; Distribution<br>
+UI/UX Design &amp; Graphic Designing<br>
+Digital Marketing<br>
+SAP (R to R)<br>
 Medical Coding
+</p>
 
-⏳ Duration: 2 Months | 2 Hours per Day
-📜 Internship Certificate + Project Review
-🤝 Placement Assistance & Interview Opportunities
-⚠️ Limited Slots – First Come First Serve
+<p><strong>⏳ Duration: 2 Months | 2 Hours per Day</strong><br>
+<strong>📜 Internship Certificate + Project Review</strong><br>
+<strong>🤝 Placement Assistance &amp; Interview Opportunities</strong><br>
+<strong>⚠️ Limited Slots – First Come First Serve</strong></p>
 
-Note:
-• Faculty members can also enrol in these programs
-• A Course Completion Certificate will be provided at a nominal fee
-• All sessions are conducted LIVE and are mentored by industry experts
+<p><strong>Note:</strong><br>
+• Faculty members can also enrol in these programs<br>
+• A Course Completion Certificate will be provided at a nominal fee<br>
+• All sessions are conducted LIVE and are mentored by industry experts</p>
 
-We kindly request you to circulate this information among your students and encourage them to take advantage of this valuable opportunity.
+<p>We kindly request you to circulate this information among your students and encourage them to take advantage of this valuable opportunity.</p>
 
-For further details, please contact:
-• Support: support@vaultsphereai.com
-• Mobile: +91 9618013827, +91 8106975810
+<p>For further details, please contact:<br>
+• Support: <a href="mailto:support@vaultsphereai.com">support@vaultsphereai.com</a><br>
+• Mobile: +91 9618013827, +91 8106975810</p>
 
-HR Contact:
-K S Deepthi
-HR Manager
-VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED
-📧 hr@vaultsphereai.com
-📞 +91 7353078181
-🌐 www.vaultsphereai.in
+<p><strong>HR Contact:</strong><br>
+K S Deepthi<br>
+HR Manager<br>
+VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED<br>
+📧 <a href="mailto:hr@vaultsphereai.com">hr@vaultsphereai.com</a><br>
+📞 +91 7353078181<br>
+🌐 <a href="http://www.vaultsphereai.in">www.vaultsphereai.in</a></p>
 
-We look forward to your support in empowering students with industry-relevant skills and improving their employability.
+<p>We look forward to your support in empowering students with industry-relevant skills and improving their employability.</p>
 
-Warm regards,
-VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED"""
+<p>Warm regards,<br>
+<strong>VAULTSPHERE AI TECHNOLOGIES PRIVATE LIMITED</strong></p>
+
+</body>
+</html>
+"""
 
 # ════════════════════════════════════════════════
 #  WARM-UP LIMIT
@@ -241,12 +265,12 @@ def log_error(email, error):
 #  SEND ONE EMAIL
 # ════════════════════════════════════════════════
 
-def send_one(from_email, from_pass, to_email, subject, body):
-    msg = MIMEMultipart()
+def send_one(from_email, from_pass, to_email, subject, html_body):
+    msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
     msg["From"]    = f"VaultSphere AI <{from_email}>"
     msg["To"]      = to_email
-    msg.attach(MIMEText(body, "plain", "utf-8"))
+    msg.attach(MIMEText(html_body, "html", "utf-8"))
     with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, timeout=15) as server:
         server.login(from_email, from_pass)
         server.sendmail(from_email, to_email, msg.as_string())
@@ -255,7 +279,7 @@ def send_one(from_email, from_pass, to_email, subject, body):
 #  SEND BATCH
 # ════════════════════════════════════════════════
 
-def send_batch(accounts, recipients, sent_log, subject, body, label, limit):
+def send_batch(accounts, recipients, sent_log, subject, html_body, label, limit):
     already_sent = load_sent(sent_log)
     pending      = [r for r in recipients if r["email"] not in already_sent]
 
@@ -265,7 +289,7 @@ def send_batch(accounts, recipients, sent_log, subject, body, label, limit):
     print(f"  Today's limit: {limit}")
 
     if not pending:
-        print(f"  ✅ All {label}s already emailed!")
+        print(f"  All {label}s already emailed!")
         return 0
 
     batch        = pending[:limit]
@@ -276,38 +300,37 @@ def send_batch(accounts, recipients, sent_log, subject, body, label, limit):
 
     for recipient in batch:
 
-        # Find available account
         while acc_index < len(accounts):
             acc_limit = accounts[acc_index].get("limit", 100)
             if acc_sent[acc_index] < acc_limit:
                 break
-            print(f"  🔄 Account {acc_index+1} hit limit → switching")
+            print(f"  Account {acc_index+1} hit limit → switching")
             acc_index += 1
 
         if acc_index >= len(accounts):
-            print(f"  ⚠️  All accounts exhausted for today.")
+            print(f"  All accounts exhausted for today.")
             break
 
         account = accounts[acc_index]
         email   = recipient["email"]
 
         try:
-            send_one(account["user"], account["pass"], email, subject, body)
+            send_one(account["user"], account["pass"], email, subject, html_body)
             mark_sent(email, sent_log)
             acc_sent[acc_index] += 1
             total_sent          += 1
-            print(f"  [{total_sent:04d}] ✅ {label} → {email} "
+            print(f"  [{total_sent:04d}] Sent → {email} "
                   f"| Acc {acc_index+1} "
                   f"({acc_sent[acc_index]}/{account.get('limit',100)})")
 
         except smtplib.SMTPAuthenticationError:
-            print(f"  ❌ AUTH FAILED: {account['user']} → skipping")
+            print(f"  AUTH FAILED: {account['user']} → skipping")
             acc_index += 1
 
         except Exception as e:
             total_failed += 1
             log_error(email, str(e))
-            print(f"  ❌ FAILED → {email} | {e}")
+            print(f"  FAILED → {email} | {e}")
 
         time.sleep(random.uniform(8, 15))
 
@@ -329,24 +352,24 @@ def run():
     total = 0
 
     # Send to STUDENTS
-    if os.path.exists(STUDENTS_FILE):
+    if STUDENTS_FILE and os.path.exists(STUDENTS_FILE):
         students = load_recipients(STUDENTS_FILE, "student")
         total += send_batch(accounts, students,
                             SENT_STUDENTS_LOG,
-                            STUDENT_SUBJECT, STUDENT_BODY,
+                            STUDENT_SUBJECT, STUDENT_HTML,
                             "student", student_limit)
     else:
-        print("⚠️  data/students.csv not found")
+        print("Skipping students (TEST_MODE or file not found)")
 
     # Send to PRINCIPALS
     if os.path.exists(PRINCIPALS_FILE):
         principals = load_recipients(PRINCIPALS_FILE, "principal")
         total += send_batch(accounts, principals,
                             SENT_PRINCIPALS_LOG,
-                            PRINCIPAL_SUBJECT, PRINCIPAL_BODY,
+                            PRINCIPAL_SUBJECT, PRINCIPAL_HTML,
                             "principal", principal_limit)
     else:
-        print("⚠️  data/principals.csv not found — skipping")
+        print("data/principals.csv not found — skipping")
 
     print(f"\n{'='*50}")
     print(f"  Day {day_no} Complete | Total sent today: {total}")

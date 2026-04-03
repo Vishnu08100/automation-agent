@@ -50,3 +50,13 @@ principal.9R@jntua.ac.in
 principal.JK@jntua.ac.in
 principal.HK@jntua.ac.in
 principal.9T@jntua.ac.in
+principal.HE@jntua.ac.in
+principal.HH@jntua.ac.in
+principal.HJ@jntua.ac.in
+principal.HD@jntua.ac.in
+principal.JR@jntua.ac.in
+principal.JZ@jntua.ac.in
+principal.9W@jntua.ac.in
+principal.KL@jntua.ac.in
+principal.JC@jntua.ac.in
+principal.JH@jntua.ac.in

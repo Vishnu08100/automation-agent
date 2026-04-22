@@ -228,7 +228,7 @@ def send_one(from_email, from_pass, to_email, subject, html_body):
         server.sendmail(from_email, to_email, msg.as_string())
 
 # ════════════════════════════════════════════════
-#  SEND BATCH
+#  SEND BATCH (Updated with Failover Logging)
 # ════════════════════════════════════════════════
 
 def send_batch(accounts, recipients, sent_log, subject, html_body, label, limit):
@@ -253,16 +253,21 @@ def send_batch(accounts, recipients, sent_log, subject, html_body, label, limit)
 
     while i < len(batch):
 
-        # Find available account
+        # Find available account and log shifts if limit is hit
         while acc_index < len(accounts):
             acc_limit = accounts[acc_index].get("limit", 100)
             if acc_sent[acc_index] < acc_limit:
                 break
-            print(f"  Account {acc_index+1} hit limit → switching to {acc_index+2}")
+            
+            old_acc = accounts[acc_index]['user']
             acc_index += 1
+            if acc_index < len(accounts):
+                new_acc = accounts[acc_index]['user']
+                print(f"  [SWITCH] Limit reached: Shifting from {old_acc} to {new_acc}")
+            else:
+                print(f"  [STOP] All accounts exhausted for today.")
 
         if acc_index >= len(accounts):
-            print(f"  All accounts exhausted for today.")
             break
 
         account = accounts[acc_index]
@@ -279,14 +284,26 @@ def send_batch(accounts, recipients, sent_log, subject, html_body, label, limit)
             i += 1
 
         except smtplib.SMTPAuthenticationError:
-            print(f"  AUTH FAILED: {account['user']} → switching, retrying {email}")
+            # Handles disabled accounts or wrong passwords seamlessly
+            old_acc = account['user']
             acc_index += 1
+            if acc_index < len(accounts):
+                new_acc = accounts[acc_index]['user']
+                print(f"  [AUTH FAILED] Login disabled/wrong password for {old_acc} → Shifting to {new_acc} and retrying.")
+            else:
+                print(f"  [AUTH FAILED] {old_acc} failed. No accounts left.")
 
         except smtplib.SMTPException as e:
             error_str = str(e)
             if "ratelimit" in error_str.lower() or "451" in error_str or "450" in error_str:
-                print(f"  RATE LIMIT: {account['user']} → switching, retrying {email}")
+                # Handles temporary server blocks
+                old_acc = account['user']
                 acc_index += 1
+                if acc_index < len(accounts):
+                    new_acc = accounts[acc_index]['user']
+                    print(f"  [RATE LIMIT] Server blocked {old_acc} → Shifting to {new_acc} and retrying.")
+                else:
+                    print(f"  [RATE LIMIT] {old_acc} blocked. No accounts left.")
                 time.sleep(3)
             else:
                 total_failed += 1
